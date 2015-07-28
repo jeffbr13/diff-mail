@@ -28,9 +28,7 @@ func init() {
 }
 
 func main() {
-	log.Printf("webAddress: %s", webAddress)
-	log.Printf("emailAddress: %s", emailAddress)
-
+	log.Printf("Send %s hourly diffs of %s", emailAddress, webAddress)
 	store := newScrapeStore()
 
 	c := time.Tick(1 * time.Hour)
@@ -41,7 +39,6 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("Emailing %s with diff results.\n", emailAddress)
-		fmt.Println(string(store.current()))
 		err = emailDiff(store)
 		if err != nil {
 			log.Println(err)
@@ -83,7 +80,6 @@ func emailDiff(store *scrapeStore) error {
 		return err
 	}
 	msg := mime + subject + "<html><body><h1>Diff between last two scrapes:</h1>" + diff + "</body></html>"
-	fmt.Println(msg)
 	err = smtp.SendMail(os.Getenv("SMTP_HOST")+":25", auth, os.Getenv("SMTP_USERNAME"), to, []byte(msg))
 	if err != nil {
 		return err
