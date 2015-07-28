@@ -33,7 +33,7 @@ func main() {
 
 	store := newScrapeStore()
 
-	c := time.Tick(1 * time.Minute)
+	c := time.Tick(1 * time.Hour)
 	for now := range c {
 		fmt.Printf("Scraping at %v\n", now)
 		err := scrape(store)
